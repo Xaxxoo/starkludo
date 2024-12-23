@@ -10,7 +10,7 @@ trait IGameActions<T> {
         player_yellow: felt252,
         player_blue: felt252,
         player_red: felt252,
-        number_of_players: u8
+        number_of_players: u8,
     ) -> usize;
     fn start(ref self: T);
 
@@ -40,7 +40,7 @@ pub mod GameActions {
     pub struct GameCreated {
         #[key]
         pub game_id: usize,
-        pub timestamp: u64
+        pub timestamp: u64,
     }
 
     #[abi(embed_v0)]
@@ -74,7 +74,7 @@ pub mod GameActions {
                 player_blue,
                 player_yellow,
                 player_green,
-                number_of_players
+                number_of_players,
             );
 
             world.write_model(@new_game);
@@ -101,7 +101,7 @@ pub mod GameActions {
         }
 
         fn get_address_from_username(
-            ref self: ContractState, username: felt252
+            ref self: ContractState, username: felt252,
         ) -> ContractAddress {
             let mut world = self.world_default();
 
