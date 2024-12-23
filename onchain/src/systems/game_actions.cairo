@@ -18,7 +18,7 @@ trait IGameActions<T> {
 
     fn move(ref self: T);
 
-    fn roll(ref self: T);
+    fn roll(ref self: T) -> (u8, u8);
 
     fn get_username_from_address(ref self: T, address: ContractAddress) -> felt252;
 
@@ -34,6 +34,7 @@ pub mod GameActions {
 
     use dojo::model::{ModelStorage, ModelValueStorage};
     use dojo::event::EventStorage;
+    use origami_random::dice::{Dice, DiceTrait};
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
@@ -90,7 +91,19 @@ pub mod GameActions {
 
         fn move(ref self: ContractState) {}
 
-        fn roll(ref self: ContractState) {}
+
+        fn roll(ref self: ContractState) -> (u8, u8) {
+            let seed = get_block_timestamp();
+
+            let mut dice1 = DiceTrait::new(6, seed.try_into().unwrap());
+            let mut dice2 = DiceTrait::new(6, (seed + 1).try_into().unwrap());
+
+            let dice1_roll = dice1.roll();
+            let dice2_roll = dice2.roll();
+
+            (dice1_roll, dice2_roll)
+        }
+
 
         fn get_username_from_address(ref self: ContractState, address: ContractAddress) -> felt252 {
             let mut world = self.world_default();
