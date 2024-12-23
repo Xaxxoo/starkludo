@@ -11,7 +11,7 @@ mod tests {
         GameActions, IGameActionsDispatcher, IGameActionsDispatcherTrait,
     };
     use starkludo::models::game::{Game, m_Game};
-    use starkludo::models::player::{Player, m_Player};
+    use starkludo::models::player::{Player, m_Player, AddressToUsername, UsernameToAddress, m_AddressToUsername, m_UsernameToAddress};
 
     /// Defines the namespace configuration for the Starkludo game system
     /// Returns a NamespaceDef struct containing namespace name and associated resources
@@ -31,6 +31,9 @@ mod tests {
 
                 // Register the main contract containing game actions
                 TestResource::Contract(GameActions::TEST_CLASS_HASH),
+                
+                TestResource::Model(m_AddressToUsername::TEST_CLASS_HASH),
+                TestResource::Model(m_UsernameToAddress::TEST_CLASS_HASH),
 
                 // Register the GameCreated event's class hash
                 TestResource::Event(GameActions::e_GameCreated::TEST_CLASS_HASH),
