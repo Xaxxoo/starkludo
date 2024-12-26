@@ -10,7 +10,7 @@ trait IGameActions<T> {
         player_yellow: felt252,
         player_blue: felt252,
         player_red: felt252,
-        number_of_players: u8
+        number_of_players: u8,
     ) -> usize;
     fn start(ref self: T);
 
@@ -42,15 +42,15 @@ pub mod GameActions {
     pub struct GameCreated {
         #[key]
         pub game_id: usize,
-        pub timestamp: u64
+        pub timestamp: u64,
     }
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
-    pub struct GameStarted{
+    pub struct GameStarted {
         #[key]
         pub game_id: usize,
-        pub time_stamp: u64
+        pub time_stamp: u64,
     }
 
     #[abi(embed_v0)]
@@ -84,7 +84,7 @@ pub mod GameActions {
                 player_blue,
                 player_yellow,
                 player_green,
-                number_of_players
+                number_of_players,
             );
 
             world.write_model(@new_game);
@@ -95,41 +95,41 @@ pub mod GameActions {
         }
 
         fn start(ref self: ContractState) {
-             // Get world state
-             let mut world = self.world_default();
+            // Get world state
+            let mut world = self.world_default();
 
-             // Get caller address
-             let caller: ContractAddress = get_caller_address();
- 
-             // Assign a game id
-             let mut game_id: usize = 999;
- 
-             //get the game state
-             let mut game: Game = world.read_model(game_id);
- 
-             // get the caller's user name
-             let caller_username: felt252 = self.get_username_from_address(caller);
- 
-             //assert that caller with the user_name is game creator
-             assert(game.created_by == caller_username, Errors::ONLY_GAME_CREATOR);
- 
-             //ensure that game status is pending
-             assert(game.game_status == GameStatus::Pending, Errors::GAME_NOT_PENDING);
- 
-             //change game status to Ongoing
-             game.game_status = GameStatus::Ongoing;
- 
-             //make player_green the first player by making player green the nest player
-             game.player_green = game.next_player;
- 
-             //update the game model
-             world.write_model(@game);
- 
-             //get the current block timestamp
-             let time_stamp: u64 = get_block_timestamp();
- 
-             //emit event
-             world.emit_event(@GameStarted { game_id, time_stamp });
+            // Get caller address
+            let caller: ContractAddress = get_caller_address();
+
+            // Assign a game id
+            let mut game_id: usize = 999;
+
+            //get the game state
+            let mut game: Game = world.read_model(game_id);
+
+            // get the caller's user name
+            let caller_username: felt252 = self.get_username_from_address(caller);
+
+            //assert that caller with the user_name is game creator
+            assert(game.created_by == caller_username, Errors::ONLY_GAME_CREATOR);
+
+            //ensure that game status is pending
+            assert(game.game_status == GameStatus::Pending, Errors::GAME_NOT_PENDING);
+
+            //change game status to Ongoing
+            game.game_status = GameStatus::Ongoing;
+
+            //make player_green the first player by making player green the nest player
+            game.player_green = game.next_player;
+
+            //update the game model
+            world.write_model(@game);
+
+            //get the current block timestamp
+            let time_stamp: u64 = get_block_timestamp();
+
+            //emit event
+            world.emit_event(@GameStarted { game_id, time_stamp });
         }
 
         fn join(ref self: ContractState) {}
@@ -159,7 +159,7 @@ pub mod GameActions {
         }
 
         fn get_address_from_username(
-            ref self: ContractState, username: felt252
+            ref self: ContractState, username: felt252,
         ) -> ContractAddress {
             let mut world = self.world_default();
 
